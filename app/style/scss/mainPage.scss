@@ -277,9 +277,9 @@ body {
 ._95 { left: 95%; }
 
 .movement-buttons {
+  display: none;
   align-items: center;
   bottom: 0;
-  display: flex;
   flex-direction: column;
   height: 34%;
   left: 0;
@@ -287,12 +287,13 @@ body {
   width: 100%;
 
   .row {
-    display: flex;
+    display: none;
     justify-content: space-between;
     margin-bottom: -3px;
   }
 
   button {
+    display: none;
     background: transparent;
     border: 3px solid $blue;
     border-radius: 5px;

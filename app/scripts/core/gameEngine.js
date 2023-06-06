@@ -12,6 +12,7 @@ class GameEngine {
     this.frameId = 0;
     this.running = false;
     this.started = false;
+    this.currentDirection = 'up';
   }
 
   /**
@@ -80,6 +81,7 @@ class GameEngine {
    */
   start() {
     if (!this.started) {
+      // this.fetchMovement();
       this.started = true;
 
       this.frameId = requestAnimationFrame((firstTimestamp) => {
@@ -95,6 +97,55 @@ class GameEngine {
       });
     }
   }
+
+  /**
+   * Fetch movement data from backend
+   */
+
+  async fetchMovement(json) {
+    const payload = [];
+    json.forEach((item) => {
+      const payLoadItem = {};
+      payLoadItem.type = item.constructor.name;
+      payLoadItem.direction = item.direction;
+      payLoadItem.desiredDirection = item.desiredDirection;
+      payLoadItem.moving = item.moving;
+      payLoadItem.position = {};
+      try {
+        payLoadItem.position.x = item.position.left;
+        payLoadItem.position.y = item.position.top;
+      } catch (e) {
+        payLoadItem.position.x = item.x;
+        payLoadItem.position.y = item.y;
+        payLoadItem.points = item.points;
+      }
+      payload.push(payLoadItem);
+    });
+    fetch((window.dataLayer[2])[1], {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        ContentType: 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(response => response.text())
+      .then((text) => {
+        console.log(text);
+        /*
+        const dir = JSON.parse(text).direction;
+        if (this.currentDirection !== dir) {
+          this.currentDirection = dir;
+          window.dispatchEvent(new CustomEvent('changeAIDirection', {
+            detail: {
+              direction: this.currentDirection,
+            },
+          }));
+        }
+        */
+      });
+  }
+
 
   /**
    * Stops the engine and cancels the current animation frame
@@ -140,6 +191,7 @@ class GameEngine {
     this.updateFpsDisplay(timestamp);
     this.processFrames();
     this.draw(this.elapsedMs / this.timestep, this.entityList);
+    (async () => this.fetchMovement(this.entityList))();
 
     this.frameId = requestAnimationFrame((nextTimestamp) => {
       this.mainLoop(nextTimestamp);

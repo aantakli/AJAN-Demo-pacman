@@ -6,9 +6,24 @@
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      function findGetParameter(parameterName) {
+        var result = null,
+          tmp = [];
+        location.search
+          .substr(1)
+          .split("&")
+          .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+          });
+        return result;
+      }
+
       gtag('js', new Date());
 
       gtag('config', 'UA-142539004-1');
+
+      gtag('uri',findGetParameter('uri') )
     </script>
 
     <script src='build/app.js'></script>

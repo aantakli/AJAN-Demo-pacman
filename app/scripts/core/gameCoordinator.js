@@ -699,6 +699,8 @@ class GameCoordinator {
    */
   registerEventListeners() {
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
+    window.addEventListener('changeAIDirection',
+      this.handleAIChangeDirection.bind(this));
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
     window.addEventListener('deathSequence', this.deathSequence.bind(this));
     window.addEventListener('dotEaten', this.dotEaten.bind(this));
@@ -727,6 +729,18 @@ class GameCoordinator {
   changeDirection(direction) {
     if (this.allowKeyPresses && this.gameEngine.running) {
       this.pacman.changeDirection(direction, this.allowPacmanMovement);
+    }
+  }
+
+  /**
+   * Calls various class functions depending upon the pressed key
+   * @param {Event} e - The keydown event to evaluate
+   */
+  handleAIChangeDirection(e) {
+    const dir = e.detail.direction;
+    const directions = ['up', 'down', 'left', 'right'];
+    if (directions.includes(dir)) {
+      this.changeDirection(dir);
     }
   }
 
