@@ -126,7 +126,7 @@ class GameEngine {
       payload.push(payLoadItem);
     });
     const data = { uuid: this.uuid, data: payload };
-    console.log('Send data update', data);
+    console.log('Sending data update', data);
     const resp = await fetch(`${(window.dataLayer[2])[1]}/update`, {
       method: 'POST',
       headers: {
