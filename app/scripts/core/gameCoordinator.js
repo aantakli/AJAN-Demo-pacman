@@ -58,6 +58,8 @@ class GameCoordinator {
     this.scale = this.determineScale(1);
     this.scaledTileSize = this.tileSize * this.scale;
     this.firstGame = true;
+    // eslint-disable-next-line no-restricted-globals
+    this.uuid = self.crypto.randomUUID();
 
     this.movementKeys = {
       // WASD
@@ -156,8 +158,11 @@ class GameCoordinator {
     if (this.firstGame) {
       this.firstGame = false;
       this.init();
+      this.initAgent().then(() => console.log('Agent Started'));
+      this.startGameplay(true);
+    } else {
+      this.startGameplay(true);
     }
-    this.startGameplay(true);
   }
 
   /**
@@ -509,7 +514,7 @@ class GameCoordinator {
   init() {
     this.registerEventListeners();
 
-    this.gameEngine = new GameEngine(this.maxFps, this.entityList);
+    this.gameEngine = new GameEngine(this.maxFps, this.uuid, this.entityList);
     this.gameEngine.start();
   }
 
@@ -575,6 +580,20 @@ class GameCoordinator {
       });
     }
   }
+
+
+  async initAgent() {
+    console.log('Send Start Request');
+    const response = await fetch(`${(window.dataLayer[2])[1]}/startGame`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+      body: this.uuid.toString(),
+    });
+    return response.text();
+  }
+
 
   /**
    * Displays "Ready!" and allows Pacman to move after a breif delay
@@ -701,6 +720,8 @@ class GameCoordinator {
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     window.addEventListener('changeAIDirection',
       this.handleAIChangeDirection.bind(this));
+    window.addEventListener('handleAIPause',
+      this.handleAIPause.bind(this));
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
     window.addEventListener('deathSequence', this.deathSequence.bind(this));
     window.addEventListener('dotEaten', this.dotEaten.bind(this));
@@ -741,6 +762,48 @@ class GameCoordinator {
     const directions = ['up', 'down', 'left', 'right'];
     if (directions.includes(dir)) {
       this.changeDirection(dir);
+    }
+    // this.gameEngine.changePausedState(this.gameEngine.running);
+  }
+
+  /**
+   * Calls various class functions depending upon the pressed key
+   * @param {Event} e - The keydown event to evaluate
+   */
+  handleAIPause(e) {
+    const pause = e.detail.p;
+    if (this.allowPause) {
+      this.allowPause = false;
+
+      setTimeout(() => {
+        if (!this.cutscene) {
+          this.allowPause = true;
+        }
+      }, 500);
+
+      this.gameEngine.changePausedState(pause);
+      this.soundManager.play('pause');
+
+      if (this.gameEngine.started) {
+        this.soundManager.resumeAmbience();
+        this.gameUi.style.filter = 'unset';
+        this.movementButtons.style.filter = 'unset';
+        this.pausedText.style.visibility = 'hidden';
+        this.pauseButton.innerHTML = 'pause';
+        this.activeTimers.forEach((timer) => {
+          timer.resume();
+        });
+      } else {
+        this.soundManager.stopAmbience();
+        this.soundManager.setAmbience('pause_beat', true);
+        this.gameUi.style.filter = 'blur(5px)';
+        this.movementButtons.style.filter = 'blur(5px)';
+        this.pausedText.style.visibility = 'visible';
+        this.pauseButton.innerHTML = 'play_arrow';
+        this.activeTimers.forEach((timer) => {
+          timer.pause();
+        });
+      }
     }
   }
 

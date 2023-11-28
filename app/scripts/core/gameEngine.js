@@ -1,5 +1,5 @@
 class GameEngine {
-  constructor(maxFps, entityList) {
+  constructor(maxFps, uuid, entityList) {
     this.fpsDisplay = document.getElementById('fps-display');
     this.elapsedMs = 0;
     this.lastFrameTimeMs = 0;
@@ -12,6 +12,7 @@ class GameEngine {
     this.frameId = 0;
     this.running = false;
     this.started = false;
+    this.uuid = uuid;
     this.currentDirection = 'up';
   }
 
@@ -81,7 +82,6 @@ class GameEngine {
    */
   start() {
     if (!this.started) {
-      // this.fetchMovement();
       this.started = true;
 
       this.frameId = requestAnimationFrame((firstTimestamp) => {
@@ -95,13 +95,17 @@ class GameEngine {
           this.mainLoop(timestamp);
         });
       });
+      // this.stop();
+      // eslint-disable-next-line no-unused-expressions
+      this.fetchMovement(this.entityList).then(() => {
+        console.log('fetchedMovement');
+      });
     }
   }
 
   /**
    * Fetch movement data from backend
    */
-
   async fetchMovement(json) {
     const payload = [];
     json.forEach((item) => {
@@ -121,29 +125,26 @@ class GameEngine {
       }
       payload.push(payLoadItem);
     });
-    fetch((window.dataLayer[2])[1], {
+    const data = { uuid: this.uuid, data: payload };
+    console.log('Send data update', data);
+    const resp = await fetch(`${(window.dataLayer[2])[1]}/update`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         ContentType: 'application/json',
       },
-      body: JSON.stringify(payload),
-    })
-      .then(response => response.text())
-      .then((text) => {
-        console.log(text);
-        /*
-        const dir = JSON.parse(text).direction;
-        if (this.currentDirection !== dir) {
-          this.currentDirection = dir;
-          window.dispatchEvent(new CustomEvent('changeAIDirection', {
-            detail: {
-              direction: this.currentDirection,
-            },
-          }));
-        }
-        */
-      });
+      body: JSON.stringify(data),
+    });
+    const dir = (await resp.json()).direction;
+    console.log('Response from update', dir);
+    if (this.currentDirection !== dir) {
+      this.currentDirection = dir;
+      window.dispatchEvent(new CustomEvent('changeAIDirection', {
+        detail: {
+          direction: this.currentDirection,
+        },
+      }));
+    }
   }
 
 
@@ -151,6 +152,7 @@ class GameEngine {
    * Stops the engine and cancels the current animation frame
    */
   stop() {
+    console.log('stop');
     this.running = false;
     this.started = false;
     cancelAnimationFrame(this.frameId);
