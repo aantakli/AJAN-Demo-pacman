@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 class GameCoordinator {
   constructor() {
     this.gameUi = document.getElementById('game-ui');
@@ -58,8 +60,8 @@ class GameCoordinator {
     this.scale = this.determineScale(1);
     this.scaledTileSize = this.tileSize * this.scale;
     this.firstGame = true;
-    // eslint-disable-next-line no-restricted-globals
-    this.uuid = self.crypto.randomUUID();
+
+    this.uuid = uuidv4();
 
     this.movementKeys = {
       // WASD
