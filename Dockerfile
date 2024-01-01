@@ -4,11 +4,14 @@ FROM node:12.18
 WORKDIR /usr/src/pacman
 COPY package*.json ./
 
+RUN npm install --global gulp-cli
 RUN npm install
 
 COPY index.html .
-COPY build build/
 COPY app/ app/
+COPY gulpfile.js .
+
+RUN gulp
 
 
 EXPOSE 8080
