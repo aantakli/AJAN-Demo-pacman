@@ -596,7 +596,11 @@ class GameCoordinator {
       headers: {
         'Content-Type': 'text/plain',
       },
-      body: this.uuid.toString(),
+      body: {
+        uuid: this.uuid.toString(),
+        workbench_Port: (window.dataLayer[3])[1],
+        storage_Port: (window.dataLayer[4])[1],
+      },
     });
     return response.text();
   }
