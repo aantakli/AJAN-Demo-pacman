@@ -590,6 +590,7 @@ class GameCoordinator {
 
   async initAgent() {
     console.log('Send Start Request');
+    console.log(window.dataLayer);
     const response = await fetch(`${(window.dataLayer[2])[1]}/startGame`, {
       method: 'POST',
       headers: {

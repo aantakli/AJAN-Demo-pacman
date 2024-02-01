@@ -126,7 +126,7 @@ class GameEngine {
       payload.push(payLoadItem);
     });
     const data = { uuid: this.uuid, data: payload };
-    console.log('Sending data update', data);
+    // console.log('Sending data update', data);
     const resp = await fetch(`${(window.dataLayer[2])[1]}/update`, {
       method: 'POST',
       headers: {
@@ -136,7 +136,7 @@ class GameEngine {
       body: JSON.stringify(data),
     });
     const dir = (await resp.json()).direction;
-    console.log('Response from update', dir);
+    // console.log('Response from update', dir);
     if (this.currentDirection !== dir) {
       this.currentDirection = dir;
       window.dispatchEvent(new CustomEvent('changeAIDirection', {
