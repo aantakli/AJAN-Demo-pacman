@@ -598,6 +598,7 @@ class GameCoordinator {
     const response = await fetch(`${(window.dataLayer[2])[1]}/startGame`, {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         ContentType: 'application/json',
       },
       body: JSON.stringify(data),
