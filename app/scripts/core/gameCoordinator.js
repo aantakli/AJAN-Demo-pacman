@@ -589,6 +589,7 @@ class GameCoordinator {
 
 
   async initAgent() {
+    /*
     const data = {
       uuid: this.uuid.toString(),
       workbench_Port: (window.dataLayer[3])[1],
@@ -602,6 +603,16 @@ class GameCoordinator {
         ContentType: 'application/json',
       },
       body: JSON.stringify(data),
+    });
+    return response.text();
+    */
+    console.log('Send Start Request');
+    const response = await fetch(`${(window.dataLayer[2])[1]}/startGame`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+      body: this.uuid.toString(),
     });
     return response.text();
   }
