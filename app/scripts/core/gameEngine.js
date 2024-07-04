@@ -116,25 +116,30 @@ class GameEngine {
   async fetchMovement(json) {
     const payload = [];
     json.forEach((item) => {
+      let scaledTileSize = 8;
       const payLoadItem = {};
       payLoadItem.type = item.constructor.name;
       payLoadItem.direction = item.direction;
       payLoadItem.desiredDirection = item.desiredDirection;
       payLoadItem.moving = item.moving;
+      if (item.scaledTileSize) {
+        // eslint-disable-next-line prefer-destructuring
+        scaledTileSize = item.scaledTileSize;
+      }
       payLoadItem.position = {};
       let pos;
       try {
-        pos = this.determineGridPosition(item.position, item.scaledTileSize);
+        pos = this.determineGridPosition(item.position, scaledTileSize);
         payLoadItem.position.x = item.position.left;
         payLoadItem.position.y = item.position.top;
-        console.log(pos, item.position, item.scaledTileSize);
+        console.log(pos, item.position, scaledTileSize);
       } catch (e) {
         // eslint-disable-next-line max-len
-        pos = this.determineGridPosition({ x: item.x, y: item.y }, item.scaledTileSize);
+        pos = this.determineGridPosition({ x: item.x, y: item.y }, scaledTileSize);
         payLoadItem.position.x = item.x;
         payLoadItem.position.y = item.y;
         payLoadItem.points = item.points;
-        console.log(pos, { x: item.x, y: item.y }, item.scaledTileSize);
+        console.log(pos, { x: item.x, y: item.y }, scaledTileSize);
       }
       payLoadItem.position = pos;
       payload.push(payLoadItem);
