@@ -105,8 +105,8 @@ class GameEngine {
 
   determineGridPosition(position, scaledTileSize) {
     return {
-      x: (position.left / scaledTileSize) + 0.5,
-      y: (position.top / scaledTileSize) + 0.5,
+      x: Math.round((position.left / scaledTileSize) + 0.5),
+      y: Math.round((position.top / scaledTileSize) + 0.5)
     };
   }
 
@@ -130,17 +130,10 @@ class GameEngine {
       let pos;
       try {
         pos = this.determineGridPosition(item.position, scaledTileSize);
-        payLoadItem.position.x = item.position.left;
-        payLoadItem.position.y = item.position.top;
-        console.log(payLoadItem.type, pos, item.position, scaledTileSize);
       } catch (e) {
         // eslint-disable-next-line max-len
         pos = this.determineGridPosition({ left: item.x, top: item.y }, scaledTileSize);
-        payLoadItem.position.x = item.x;
-        payLoadItem.position.y = item.y;
         payLoadItem.points = item.points;
-        // eslint-disable-next-line max-len
-        console.log(payLoadItem.type, pos, { x: item.x, y: item.y }, scaledTileSize);
       }
       payLoadItem.position = pos;
       payload.push(payLoadItem);
