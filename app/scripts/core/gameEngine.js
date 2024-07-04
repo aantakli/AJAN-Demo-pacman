@@ -103,6 +103,13 @@ class GameEngine {
     }
   }
 
+  determineGridPosition(position, scaledTileSize) {
+    return {
+      x: (position.left / scaledTileSize) + 0.5,
+      y: (position.top / scaledTileSize) + 0.5,
+    };
+  }
+
   /**
    * Fetch movement data from backend
    */
@@ -115,18 +122,24 @@ class GameEngine {
       payLoadItem.desiredDirection = item.desiredDirection;
       payLoadItem.moving = item.moving;
       payLoadItem.position = {};
+      let pos;
       try {
+        pos = this.determineGridPosition(item.position, item.scaledTileSize);
         payLoadItem.position.x = item.position.left;
         payLoadItem.position.y = item.position.top;
       } catch (e) {
+        // eslint-disable-next-line max-len
+        pos = this.determineGridPosition({ x: item.x, y: item.y }, item.scaledTileSize);
         payLoadItem.position.x = item.x;
         payLoadItem.position.y = item.y;
         payLoadItem.points = item.points;
       }
+      console.log(pos);
+      payLoadItem.position = pos;
       payload.push(payLoadItem);
     });
     const data = { uuid: this.uuid, data: payload };
-    // console.log('Sending data update', data);
+    console.log('Sending data update', data);
     const resp = await fetch(`${(window.dataLayer[2])[1]}/update`, {
       method: 'POST',
       headers: {
