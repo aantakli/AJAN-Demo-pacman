@@ -127,14 +127,15 @@ class GameEngine {
         pos = this.determineGridPosition(item.position, item.scaledTileSize);
         payLoadItem.position.x = item.position.left;
         payLoadItem.position.y = item.position.top;
+        console.log(pos, item.position, item.scaledTileSize);
       } catch (e) {
         // eslint-disable-next-line max-len
         pos = this.determineGridPosition({ x: item.x, y: item.y }, item.scaledTileSize);
         payLoadItem.position.x = item.x;
         payLoadItem.position.y = item.y;
         payLoadItem.points = item.points;
+        console.log(pos, { x: item.x, y: item.y }, item.scaledTileSize);
       }
-      console.log(pos);
       payLoadItem.position = pos;
       payload.push(payLoadItem);
     });
