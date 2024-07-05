@@ -770,6 +770,7 @@ class GameCoordinator {
    * @param {({'up'|'down'|'left'|'right'})} direction
    */
   changeDirection(direction) {
+    console.log('Change', direction);
     if (this.allowKeyPresses && this.gameEngine.running) {
       this.pacman.changeDirection(direction, this.allowPacmanMovement);
     }
@@ -781,6 +782,7 @@ class GameCoordinator {
    */
   handleAIChangeDirection(e) {
     const dir = e.detail.direction;
+    console.log('Event', dir);
     const directions = ['up', 'down', 'left', 'right'];
     if (directions.includes(dir)) {
       this.changeDirection(dir);
