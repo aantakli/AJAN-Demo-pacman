@@ -152,7 +152,6 @@ class GameEngine {
     // console.log('Response from update', dir);
     // if (this.currentDirection !== dir) {
     this.currentDirection = dir;
-    console.log('CurrentDir', this.currentDirection);
     window.dispatchEvent(new CustomEvent('changeAIDirection', {
       detail: {
         direction: this.currentDirection,

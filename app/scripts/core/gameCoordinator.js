@@ -780,9 +780,7 @@ class GameCoordinator {
    */
   handleAIChangeDirection(e) {
     const dir = e.detail.direction;
-    console.log('Event', dir);
-    const directions = ['up', 'down', 'left', 'right'];
-    if (directions.includes(dir)) {
+    if (dir) {
       this.changeDirection(dir);
     }
     // this.gameEngine.changePausedState(this.gameEngine.running);
