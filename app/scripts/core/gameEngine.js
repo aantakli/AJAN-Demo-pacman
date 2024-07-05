@@ -131,7 +131,6 @@ class GameEngine {
       try {
         pos = this.determineGridPosition(item.position, scaledTileSize);
       } catch (e) {
-        console.log(item);
         // eslint-disable-next-line max-len
         pos = this.determineGridPosition({ left: item.x, top: item.y }, scaledTileSize);
         payLoadItem.points = item.points;
