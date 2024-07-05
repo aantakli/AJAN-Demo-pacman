@@ -742,8 +742,6 @@ class GameCoordinator {
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     window.addEventListener('changeAIDirection',
       this.handleAIChangeDirection.bind(this));
-    window.addEventListener('handleAIPause',
-      this.handleAIPause.bind(this));
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
     window.addEventListener('deathSequence', this.deathSequence.bind(this));
     window.addEventListener('dotEaten', this.dotEaten.bind(this));
@@ -790,46 +788,6 @@ class GameCoordinator {
     // this.gameEngine.changePausedState(this.gameEngine.running);
   }
 
-  /**
-   * Calls various class functions depending upon the pressed key
-   * @param {Event} e - The keydown event to evaluate
-   */
-  handleAIPause(e) {
-    const pause = e.detail.p;
-    if (this.allowPause) {
-      this.allowPause = false;
-
-      setTimeout(() => {
-        if (!this.cutscene) {
-          this.allowPause = true;
-        }
-      }, 500);
-
-      this.gameEngine.changePausedState(pause);
-      this.soundManager.play('pause');
-
-      if (this.gameEngine.started) {
-        this.soundManager.resumeAmbience();
-        this.gameUi.style.filter = 'unset';
-        this.movementButtons.style.filter = 'unset';
-        this.pausedText.style.visibility = 'hidden';
-        this.pauseButton.innerHTML = 'pause';
-        this.activeTimers.forEach((timer) => {
-          timer.resume();
-        });
-      } else {
-        this.soundManager.stopAmbience();
-        this.soundManager.setAmbience('pause_beat', true);
-        this.gameUi.style.filter = 'blur(5px)';
-        this.movementButtons.style.filter = 'blur(5px)';
-        this.pausedText.style.visibility = 'visible';
-        this.pauseButton.innerHTML = 'play_arrow';
-        this.activeTimers.forEach((timer) => {
-          timer.pause();
-        });
-      }
-    }
-  }
 
   /**
    * Calls various class functions depending upon the pressed key
