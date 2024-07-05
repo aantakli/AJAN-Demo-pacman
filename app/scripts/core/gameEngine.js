@@ -106,7 +106,7 @@ class GameEngine {
   determineGridPosition(position, scaledTileSize) {
     return {
       x: Math.round((position.left / scaledTileSize) + 0.5),
-      y: Math.round((position.top / scaledTileSize) + 0.5)
+      y: Math.round((position.top / scaledTileSize) + 0.5),
     };
   }
 
@@ -131,6 +131,7 @@ class GameEngine {
       try {
         pos = this.determineGridPosition(item.position, scaledTileSize);
       } catch (e) {
+        console.log(item);
         // eslint-disable-next-line max-len
         pos = this.determineGridPosition({ left: item.x, top: item.y }, scaledTileSize);
         payLoadItem.points = item.points;
@@ -149,7 +150,7 @@ class GameEngine {
       body: JSON.stringify(data),
     });
     const dir = (await resp.json()).direction;
-    // console.log('Response from update', dir);
+    console.log('Response from update', dir);
     if (this.currentDirection !== dir) {
       this.currentDirection = dir;
       window.dispatchEvent(new CustomEvent('changeAIDirection', {
