@@ -147,10 +147,9 @@ class GameEngine {
       },
       body: JSON.stringify(data),
     });
-    const dir = (await resp.json()).direction;
     // console.log('Response from update', dir);
     // if (this.currentDirection !== dir) {
-    this.currentDirection = dir;
+    this.currentDirection = `${(await resp.json()).direction}`;
     window.dispatchEvent(new CustomEvent('changeAIDirection', {
       detail: {
         direction: this.currentDirection,
