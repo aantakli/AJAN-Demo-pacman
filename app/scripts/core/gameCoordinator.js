@@ -768,7 +768,7 @@ class GameCoordinator {
    * @param {({'up'|'down'|'left'|'right'})} direction
    */
   changeDirection(direction) {
-    console.log('Change', direction);
+    console.log('Change', direction, this.pacman.direction);
     if (this.allowKeyPresses && this.gameEngine.running) {
       this.pacman.changeDirection(direction, this.allowPacmanMovement);
     }
