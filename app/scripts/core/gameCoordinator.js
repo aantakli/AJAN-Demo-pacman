@@ -786,9 +786,8 @@ class GameCoordinator {
    */
   handleAIChangeDirection(e) {
     const dir = e.detail.direction;
-    console.log(dir);
     if (dir) {
-      this.changeDirection(this.movementKeys[dir]);
+      this.changeDirection(this.movementKeys[83]);
     }
     // this.gameEngine.changePausedState(this.gameEngine.running);
   }

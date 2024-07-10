@@ -147,9 +147,10 @@ class GameEngine {
       },
       body: JSON.stringify(data),
     });
+    const dir = (await resp.json()).direction;
     // console.log('Response from update', dir);
     // if (this.currentDirection !== dir) {
-    this.currentDirection = `${(await resp.json()).direction}`;
+    this.currentDirection = dir;
     window.dispatchEvent(new CustomEvent('changeAIDirection', {
       detail: {
         direction: this.currentDirection,
@@ -163,7 +164,6 @@ class GameEngine {
    * Stops the engine and cancels the current animation frame
    */
   stop() {
-    console.log('stop');
     this.running = false;
     this.started = false;
     cancelAnimationFrame(this.frameId);
