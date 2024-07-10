@@ -779,6 +779,7 @@ class GameCoordinator {
    * @param {Event} e - The keydown event to evaluate
    */
   handleAIChangeDirection(e) {
+    console.log(e.detail.direction);
     const dir = this.movementKeys[e.detail.direction];
     if (dir) {
       this.changeDirection(dir);

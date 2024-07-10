@@ -149,7 +149,7 @@ class GameEngine {
     });
     // eslint-disable-next-line radix
     const dir = parseInt((await resp.json()).direction);
-    // console.log('Response from update', dir);
+    console.log('Response from update', dir);
     // if (this.currentDirection !== dir) {
     this.currentDirection = dir;
     window.dispatchEvent(new CustomEvent('changeAIDirection', {
