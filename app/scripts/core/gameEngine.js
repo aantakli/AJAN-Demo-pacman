@@ -147,7 +147,8 @@ class GameEngine {
       },
       body: JSON.stringify(data),
     });
-    const dir = (await resp.json()).direction;
+    // eslint-disable-next-line radix
+    const dir = parseInt((await resp.json()).direction);
     // console.log('Response from update', dir);
     // if (this.currentDirection !== dir) {
     this.currentDirection = dir;

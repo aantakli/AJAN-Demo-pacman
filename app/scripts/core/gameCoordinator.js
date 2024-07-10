@@ -79,12 +79,6 @@ class GameCoordinator {
       40: 'down',
       37: 'left',
       39: 'right',
-
-      // AI
-      up: 'up',
-      down: 'down',
-      left: 'left',
-      right: 'right',
     };
 
     this.fruitPoints = {
@@ -785,9 +779,9 @@ class GameCoordinator {
    * @param {Event} e - The keydown event to evaluate
    */
   handleAIChangeDirection(e) {
-    const dir = e.detail.direction;
+    const dir = this.movementKeys[e.detail.direction];
     if (dir) {
-      this.changeDirection(this.movementKeys[83]);
+      this.changeDirection(dir);
     }
     // this.gameEngine.changePausedState(this.gameEngine.running);
   }
